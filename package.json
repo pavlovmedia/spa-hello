@@ -1,0 +1,17 @@
+{
+  "name": "spa-hello",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "lodash": "^4.3.0",
+    "require-dir": "^0.3.0",
+    "swf-ng-kit": "git+ssh://git@gitlab.srv.pavlovmedia.corp:webdev/swf-ng-kit.git"
+  }
+}
