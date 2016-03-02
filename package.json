@@ -8,10 +8,11 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.9.0",
     "lodash": "^4.3.0",
     "require-dir": "^0.3.0",
-    "swf-ng-kit": "git+ssh://git@gitlab.srv.pavlovmedia.corp:webdev/swf-ng-kit.git"
+    "swf-ng-kit": "git+ssh://git@gitlab.srv.pavlovmedia.corp:webdev/swf-ng-kit.git",
+    "swf-swagger-kit": "git+ssh://git@gitlab.srv.pavlovmedia.corp:webdev/swf-swagger-kit.git"
   }
 }

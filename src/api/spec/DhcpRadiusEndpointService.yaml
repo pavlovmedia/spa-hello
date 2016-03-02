@@ -1,0 +1,524 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.0"
+  title: DHCP Radius
+basePath: /services
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /mikrotik:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: Gets a list of Mikrotik objects
+      operationId: getMikrotiks
+      produces:
+        - application/json
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: ListOfMikrotiks
+            type: array
+            items:
+                $ref: '#/definitions/mikrotik'
+    post:
+      description: Adds a new Mikrotik
+      operationId: createMikrotik
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from created Mikrotik
+          schema:
+            $ref: '#/definitions/mikrotik'
+      parameters:
+        - name: newTik
+          in: body
+          required: true
+          description: New Mikrotik data
+          schema:
+            $ref: '#/definitions/mikrotik'
+  /mikrotik/{id}:
+    put:
+      description: Updates a Mikrotik
+      operationId: updateMikrotik
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from updated Mikrotik
+          schema:
+            $ref: '#/definitions/mikrotik'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: New Mikrotik id
+          type: integer
+          format: int64
+          
+        - name: updatedTik
+          in: body
+          required: true
+          description: Mikrotik data
+          schema:
+            $ref: '#/definitions/mikrotik'
+            
+    delete:
+      description: Deletes a Mikrotik
+      operationId: deleteMikrotik
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Data from deleted Mikrotik
+          schema:
+            $ref: '#/definitions/mikrotik'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+          
+  /mikrotik/{mid}/blacklist:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: Gets a blacklist
+      operationId: getBlacklist
+      produces:
+        - application/json
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Blacklist
+            type: array
+            items:
+                $ref: '#/definitions/blacklist'
+      parameters:
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+    post:
+      description: Adds a new blacklist entry
+      operationId: createBlacklist
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from created blacklist entry
+          schema:
+            $ref: '#/definitions/blacklist'
+      parameters:
+        - name: newBlacklist
+          in: body
+          required: true
+          description: New blacklist data
+          schema:
+            $ref: '#/definitions/blacklist'
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+  /mikrotik/{mid}/blacklist/{id}:
+    put:
+      description: Updates a blacklist entry
+      operationId: updateBlacklist
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from updated blacklist
+          schema:
+            $ref: '#/definitions/blacklist'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: updated blacklist id
+          type: integer
+          format: int64
+          
+        - name: updatedBlacklist
+          in: body
+          required: true
+          description: blacklist data
+          schema:
+            $ref: '#/definitions/blacklist'
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+            
+    delete:
+      description: Deletes a blacklist
+      operationId: deleteBlacklist
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Data from deleted blacklist
+          schema:
+            $ref: '#/definitions/blacklist'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: blacklist id
+          type: integer
+          format: int64
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+  /mikrotik/{mid}/client:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: Gets the clients
+      operationId: getClients
+      produces:
+        - application/json
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Client
+            type: array
+            items:
+                $ref: '#/definitions/client'
+      parameters:
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+    post:
+      description: Adds a new client entry
+      operationId: createClient
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from created client entry
+          schema:
+            $ref: '#/definitions/client'
+      parameters:
+        - name: newClient
+          in: body
+          required: true
+          description: New client data
+          schema:
+            $ref: '#/definitions/client'
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+  /mikrotik/{mid}/client/{id}:
+    put:
+      description: Updates a client entry
+      operationId: updateClient
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from updated client
+          schema:
+            $ref: '#/definitions/client'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: updated client id
+          type: integer
+          format: int64
+          
+        - name: updatedClient
+          in: body
+          required: true
+          description: Client data
+          schema:
+            $ref: '#/definitions/client'
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+            
+    delete:
+      description: Deletes a client
+      operationId: deleteClient
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Data from deleted client
+          schema:
+            $ref: '#/definitions/client'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: client id
+          type: integer
+          format: int64
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+  /mikrotik/{mid}/oui:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: Gets a OUIs
+      operationId: getOui
+      produces:
+        - application/json
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Blacklist
+            type: array
+            items:
+                $ref: '#/definitions/oui'
+      parameters:
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+    post:
+      description: Adds a new OUI entry
+      operationId: createOui
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from created OUI entry
+          schema:
+            $ref: '#/definitions/oui'
+      parameters:
+        - name: newOui
+          in: body
+          required: true
+          description: New OUI data
+          schema:
+            $ref: '#/definitions/oui'
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+  /mikrotik/{mid}/oui/{id}:
+    put:
+      description: Updates a OUI entry
+      operationId: updateOui
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        '200':
+          description: Data from updated OUI
+          schema:
+            $ref: '#/definitions/oui'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: updated OUI id
+          type: integer
+          format: int64
+          
+        - name: updatedOui
+          in: body
+          required: true
+          description: OUI data
+          schema:
+            $ref: '#/definitions/oui'
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+
+            
+    delete:
+      description: Deletes a OUI
+      operationId: deleteOui
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Data from deleted OUI
+          schema:
+            $ref: '#/definitions/oui'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: OUI id
+          type: integer
+          format: int64
+
+        - name: mid
+          in: path
+          required: true
+          description: Mikrotik id
+          type: integer
+          format: int64
+          
+definitions:
+  mikrotik:
+    type: object
+    description: Mikrotik IP address and ID
+    required:
+      - ipAddress
+      - id
+    properties:
+      id:
+        description: ID of the Mikrotik entry
+        type: integer
+        format: int32
+      ipAddress:
+        description: IP address of the Mikrotik system
+        type: string
+  blacklist:
+    type: object
+    description: Blacklisted MAC address entry
+    required:
+      - macAddress
+      - mid
+      - id
+    properties:
+      id:
+        description: ID of the blacklist entry
+        type: integer
+        format: int32
+      mid:
+        description: ID of the Mikrotik which owns the list
+        type: integer
+        format: int32
+      macAddress:
+        description: MAC address that is blacklisted
+        type: string
+  client:
+    type: object
+    description: Client entry
+    required:
+      - macAddress
+      - ipAddress
+      - mid
+      - id
+    properties:
+      id:
+        description: ID of the client
+        type: integer
+        format: int32
+      mid:
+        description: ID of the Mikrotik which owns the list
+        type: integer
+        format: int32
+      macAddress:
+        description: MAC address of the client
+        type: string
+      ipAddress:
+        description: IP address of the client
+        type: string
+  oui:
+    type: object
+    description: OUI entry
+    required:
+      - prefix
+      - ipPool
+      - mid
+      - id
+    properties:
+      id:
+        description: ID of the OUI
+        type: integer
+        format: int32
+      mid:
+        description: ID of the Mikrotik which owns the list
+        type: integer
+        format: int32
+      prefix:
+        description: MAC address prefix for the pool
+        type: string
+      ipPool:
+        description: Address pool of the OUI
+        type: string
+      
