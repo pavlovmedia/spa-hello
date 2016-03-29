@@ -26,6 +26,13 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+<div>
+    <ul class="nav nav-tabs">
+      <li role="presentation" ng-class="{'active': vm.stateName === 'shell.home'}"><a ui-sref="shell.home">Home</a></li>
+      <li role="presentation" ng-class="{'active': vm.stateName === 'shell.devices'}"><a ui-sref="shell.devices">Devices</a></li>
+    </ul>
+</div>
+
 <div ui-view></div>
 
 <div class="navbar navbar-default navbar-fixed-bottom">

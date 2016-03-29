@@ -12,7 +12,10 @@
     "gulp": "^3.9.0",
     "lodash": "^4.3.0",
     "require-dir": "^0.3.0",
-    "swf-ng-kit": "git+ssh://git@github.com/pavlovmedia/swf-ng-kit.git",
+    "swf-ng-kit": "git+ssh://git@github.com/pavlovmedia/swf-ng-kit.git#1.0.0-alpha2",
     "swf-swagger-kit": "git+ssh://git@github.com/pavlovmedia/swf-swagger-kit.git"
+  },
+  "dependencies": {
+    "karma": "^0.13.22"
   }
 }

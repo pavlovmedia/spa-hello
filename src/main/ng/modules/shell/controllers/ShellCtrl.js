@@ -1,20 +1,23 @@
 (function() {
-	function ShellCtrl($window) {
+	function ShellCtrl($state) {
 		"ngInject";
-		this.$window = $window;
+		var vm = this;
 
-		this.appTitle = 'Hello World!';
+		vm.appTitle = 'Hello World!';
+		vm.stateName = $state.current.name;
+
+		console.log(vm.stateName);
 	}
 
 	ShellCtrl.prototype.doAlert = function() {
-		this.$window.alert('Hey world!');
+
 	};
 
 
 	/*
 	 * @ngInject
 	 */
-	function config($stateProvider) {
+	function config($stateProvider, $urlRouterProvider) {
 		"ngInject";
 
 		$stateProvider.state('shell', {
@@ -24,6 +27,9 @@
 			controllerAs: 'vm',
 			templateUrl: 'shell/templates/shell.html'
 		});
+
+		// make this the default/fallback URL
+		$urlRouterProvider.otherwise('/home');
 	}
 
 	var app = require('angular').module('swf.ng.app');
