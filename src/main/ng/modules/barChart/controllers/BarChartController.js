@@ -1,5 +1,9 @@
 (function() {
-    var d3 = require('d3');
+
+    /**
+     * In place to provide a state holder for the directive 
+     * @constructor
+     */
     function BarChartCtrl() {
     }
 
