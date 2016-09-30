@@ -4,20 +4,20 @@
      * In place to provide a state holder for the directive 
      * @constructor
      */
-    function BarChartCtrl() {
+    function D3BarChartCtrl() {
     }
 
     function config($stateProvider) {
         'ngInject';
 
-        $stateProvider.state('shell.barChart', {
-            url: 'barChart',
+        $stateProvider.state('shell.d3barChart', {
+            url: 'd3barChart',
             //controller: 'BarChartCtrl as vm',
-            templateUrl: 'barChart/templates/bar-chart-controller.html'
+            templateUrl: 'd3barChart/templates/d3-bar-chart-controller.html'
         });
     }
 
     var app = require('angular').module('swf.ng.app');
-    app.controller('BarChartCtrl', BarChartCtrl);
+    app.controller('D3BarChartCtrl', D3BarChartCtrl);
     app.config(config);
 })();
