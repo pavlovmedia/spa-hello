@@ -12,8 +12,8 @@
 
         $stateProvider.state('shell.d3barChart', {
             url: 'd3barChart',
-            //controller: 'BarChartCtrl as vm',
-            templateUrl: 'd3BarChart/templates/d3-bar-chart-controller.html'
+            controller: 'BarChartCtrl as vm',
+            templateUrl: 'd3barchart/templates/d3-bar-chart-controller.html'
         });
     }
 

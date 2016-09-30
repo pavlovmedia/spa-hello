@@ -5,7 +5,7 @@
     var d3BarChartDirective = function() {
         return {
             restrict: 'E',
-            templateUrl: 'd3BarChart/templates/d3-bar-chart-directive.html',
+            templateUrl: 'd3barchart/templates/d3-bar-chart-directive.html',
             controller: 'D3BarChartDirectiveCtrl as vm',
             scope: {}
         };
