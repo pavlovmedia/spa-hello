@@ -2,5 +2,26 @@
     <br />
     <div class="alert alert-info">Bar Chart Directive Example</div>
 
-    <d-3-bar-chart-directive></d-3-bar-chart-directive>
+    <d-3-bar-chart-directive data="vm.boundDataSet"></d-3-bar-chart-directive>
+
+    <div class="col-sm-4">
+        <h3>Meta Inputs</h3>
+
+        <label>Vertical</label> <input type="checkbox"><br />
+        <label>Number of Bars Allowed</label> <input type="number"><br />
+        <label>Bar Chart Grid Size</label> <input type="number"><br />
+
+        <h3>Data Inputs</h3>
+
+        <label>Active</label> <input type="checkbox">
+        <label>Bar Color</label> <input type="text"><br />
+        <label>Bar Label</label> <input type="text"><br />
+        <label>Bar Data</label> <input type="number"><br />
+    </div>
+    <div class="col-sm-12">
+        <h3>Mock Data</h3>
+        This is were the mock data will be displayed in a pure form <br /><br />
+
+        {{vm.boundDataSet}}
+    </div>
 </div>
