@@ -7,7 +7,13 @@
             restrict: 'E',
             templateUrl: 'd3timegraph/templates/d3-time-graph-directive.html',
             controller: 'D3TimeGraphDirectiveCtrl as vm',
-            scope: {}
+            scope: {},
+            bindToController: {
+                testVariable: '=',
+                sourceData: '=',
+                height: '=',
+                width: '='
+            }
         };
     };
 

@@ -1,6 +1,29 @@
-<div>
+<div ng-init="vm.initialize()">
     <br />
     <div class="alert alert-info">Time Graph Directive Example[s]</div>
 
-    <d3-time-graph-directive></d3-time-graph-directive>
+    <div class="row">
+        <div class="col-sm-8">
+            <d3-time-graph-directive
+                    test-variable="'rofl'"
+                    source-data="vm.sourceData"
+                    height="'500px'"
+                    width="'600px'"
+            >
+            </d3-time-graph-directive>
+        </div>
+        <div class="col-sm-4">
+            <h3>Inputs</h3>
+
+            <label>Add additional data
+                <input type="button" ng-click="vm.addRandomData()">
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            Raw Data:
+            <pre>{{vm.sourceData | json}}</pre>
+        </div>
+    </div>
 </div>
