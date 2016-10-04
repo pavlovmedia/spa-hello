@@ -92,7 +92,9 @@
                 var buildHorizontalBarGraph = function (graphData) {
                     createSvg();
 
-                    // set ranges
+                    /**
+                     * set ranges
+                     */
                     var x = d3.scaleBand().range([0, width]).padding(0.1);
                     var y = d3.scaleLinear().range([height, 0]);
 
@@ -100,7 +102,9 @@
                         data.value = +data.value;
                     });
 
-                    // Scale the range of the data in the domains
+                    /**
+                     * Scale the range of the data in the domains
+                     */
                     x.domain(graphData.map(function (data) {
                         return data.name;
                     }));
@@ -109,7 +113,9 @@
                         return data.value;
                     })]);
 
-                    // append the rectangles to the chart
+                    /**
+                     * append the rectangles to the chart
+                     */
                     svg.selectAll('.bar')
                         .data(graphData)
                         .enter().append('rect')
@@ -128,11 +134,15 @@
                             return data.color
                         });
 
-                    // add the x Axis
+                    /**
+                     * add the x Axis
+                     */
                     svg.append('g').attr('transform', 'translate(0,' + height + ')')
                         .call(d3.axisBottom(x));
 
-                    // add the y Axis
+                    /**
+                     * add the y Axis
+                     */
                     svg.append('g')
                         .call(d3.axisLeft(y));
                 };
