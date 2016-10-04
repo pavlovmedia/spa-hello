@@ -6,17 +6,51 @@
      */
     function D3BarChartCtrl() {
         var vm = this;
+
+        //Bond Meta input exampls
+        vm.boundMetaVertical = false;
+        vm.boundMetaBarsAllowed = 6;
+        vm.boundMetaGridSize = 7;
         
-        
+        // bound input data exampls
+        vm.dataPointOneActive = true;
+        vm.dataPointOneName = "Batman";
+        vm.dataPointOneValue = 3;
+        vm.dataPointOneColor = 'black';
+
+        vm.dataPointTwoActive = true;
+        vm.dataPointTwoName = "Joker";
+        vm.dataPointTwoValue = 50;
+        vm.dataPointTwoColor = 'purple';
+
+        vm.dataPointThreeActive = true;
+        vm.dataPointThreeName = "Hulk";
+        vm.dataPointThreeValue = 13;
+        vm.dataPointThreeColor = 'green';
+
+        vm.dataPointFourActive = true;
+        vm.dataPointFourName = "Abomination";
+        vm.dataPointFourValue = 30;
+        vm.dataPointFourColor = 'red';
+
+        vm.dataPointFiveActive = true;
+        vm.dataPointFiveName = "Iron Man";
+        vm.dataPointFiveValue = 10;
+        vm.dataPointFiveColor = 'gold';
+
+        vm.dataPointSixActive = true;
+        vm.dataPointSixName = "Mandarin";
+        vm.dataPointSixValue = 19;
+        vm.dataPointSixColor = 'orange';
+
         vm.boundDataSet = [
-            {name: "Locke",    value:  4},
-            {name: "Reyes",    value:  8},
-            {name: "Ford",     value: 15},
-            {name: "Jarrah",   value: 16},
-            {name: "Shephard", value: 23},
-            {name: "Kwon",     value: 42}
-        ];
-        
+            {name: vm.dataPointOneName, value:  vm.dataPointOneValue, color: vm.dataPointOneColor, active: vm.dataPointOneActive},
+            {name: vm.dataPointTwoName, value:  vm.dataPointTwoValue, color: vm.dataPointTwoColor, active: vm.dataPointTwoActive},
+            {name: vm.dataPointThreeName, value: vm.dataPointThreeValue, color: vm.dataPointThreeColor, active: vm.dataPointThreeActive},
+            {name: vm.dataPointFourName, value: vm.dataPointFourValue, color: vm.dataPointFourColor, active: vm.dataPointFourActive},
+            {name: vm.dataPointFiveName, value: vm.dataPointFiveValue, color: vm.dataPointFiveColor, active: vm.dataPointFiveActive},
+            {name: vm.dataPointSixName, value: vm.dataPointSixValue, color: vm.dataPointSixColor, active: vm.dataPointSixActive}
+        ];        
     }
 
     function config($stateProvider) {
