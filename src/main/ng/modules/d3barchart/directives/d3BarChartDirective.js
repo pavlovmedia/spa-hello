@@ -4,11 +4,8 @@
      */
 
     var d3 = require('d3');
-    var $ = require('jquery');
 
-    var d3BarChartDirective = function ($window) {
-        'ngInject';
-
+    var d3BarChartDirective = function () {
         return {
             restrict: 'E',
             controller: 'D3BarChartDirectiveCtrl as vm',
@@ -19,7 +16,7 @@
                 barsAllowed: '=',
                 heightAndWidth: '='
             },
-            link: function (scope, element) {
+            link: function (scope) {
 
                 var margin = {top: 20, right: 20, bottom: 30, left: 40};
                 var width = scope.heightAndWidth.width - margin.left - margin.right;
@@ -41,7 +38,7 @@
 
                     for (var i = 0; i < scope.barsAllowed; i++) {
 
-                        if(!onlyActive[i]) {
+                        if (!onlyActive[i]) {
                             break;
                         }
 
@@ -79,29 +76,21 @@
                 }, true);
 
                 /**
-                 * Watch vertical changes then remove and rebuild the graph
+                 * Watch height and width  changes then remove and rebuild the graph
                  */
-                scope.$watch(function() {
-                    scope.heightAndWidth.height = element.clientHeight;
-                    scope.heightAndWidth.width = element.clientWidth;
+                scope.$watch(function () {
                     return scope.heightAndWidth.height + scope.heightAndWidth.width;
                 }, function () {
-                    console.log('here');
-
                     buildTable();
-                });
-
-                element.bind('resize', function () {
-                    $scope.$apply();
-                });
+                }, true);
 
                 /**
                  * Append the graph to the element
                  */
                 var createSvg = function () {
                     svg = d3.select('#testId').append('svg')
-                        .attr('width', width + margin.left + margin.right)
-                        .attr('height', height + margin.top + margin.bottom)
+                        .attr('width', scope.heightAndWidth.width + margin.left + margin.right)
+                        .attr('height', scope.heightAndWidth.height + margin.top + margin.bottom)
                         .append('g')
                         .attr('transform',
                             'translate(' + margin.left + ',' + margin.top + ')');
@@ -111,14 +100,14 @@
                  * Build the graph
                  * @param graphData The data used to build the graph
                  */
-                var buildHorizontalBarGraph = function (graphData) {
+                var buildVerticalBarGraph = function (graphData) {
                     createSvg();
 
                     /**
                      * set ranges
                      */
-                    var x = d3.scaleBand().range([0, width]).padding(0.1);
-                    var y = d3.scaleLinear().range([height, 0]);
+                    var x = d3.scaleBand().range([0, scope.heightAndWidth.width - 20]).padding(0.1);
+                    var y = d3.scaleLinear().range([scope.heightAndWidth.height, 0]);
 
                     _.forEach(graphData, function (data) {
                         data.value = +data.value;
@@ -150,7 +139,7 @@
                             return y(data.value);
                         })
                         .attr('height', function (data) {
-                            return height - y(data.value);
+                            return scope.heightAndWidth.height - y(data.value);
                         })
                         .style('fill', function (data) {
                             return data.color
@@ -159,7 +148,7 @@
                     /**
                      * add the x Axis
                      */
-                    svg.append('g').attr('transform', 'translate(0,' + height + ')')
+                    svg.append('g').attr('transform', 'translate(0,' + scope.heightAndWidth.height + ')')
                         .call(d3.axisBottom(x));
 
                     /**
@@ -169,13 +158,17 @@
                         .call(d3.axisLeft(y));
                 };
 
-                var buildVerticalBarGraph = function (graphData) {
+                /**
+                 *
+                 * @param graphData data that builds the table
+                 */
+                var buildHorizontalBarGraph = function (graphData) {
                     createSvg();
 
-                    var axisMargin = 20,
-                        barHeight = (height - axisMargin - margin.top * 2) * 0.4 / graphData.length,
-                        barPadding = (height - axisMargin - margin.right * 2) * 0.6 / graphData.length,
-                        labelWidth = 0;
+                    var axisMargin = 20;
+                    var barHeight = (scope.heightAndWidth.height - axisMargin - margin.top * 2) * 0.4 / graphData.length;
+                    var barPadding = (scope.heightAndWidth.height - axisMargin - margin.right * 2) * 0.6 / graphData.length;
+                    var labelWidth = 0;
 
                     var max = d3.max(graphData, function (data) {
                         return data.value;
@@ -186,6 +179,10 @@
                         .enter()
                         .append('g');
 
+                    var scale = d3.scaleLinear()
+                        .domain([0, max])
+                        .range([0, (scope.heightAndWidth.width - margin.right * 2 - labelWidth) - 100]);
+
                     bar.attr('class', 'bar')
                         .attr('cx', 0)
                         .attr('transform', function (d, i) {
@@ -195,17 +192,13 @@
                     bar.append('text')
                         .attr('class', 'label')
                         .attr('y', barHeight / 2)
-                        .attr('dy', '.35em') //vertical align middle
+                        .attr('dy', '.35em')
                         .text(function (data) {
                             return data.name;
                         })
                         .each(function () {
                             labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));
                         });
-
-                    var scale = d3.scaleLinear()
-                        .domain([0, max])
-                        .range([0, (width - margin.right * 2 - labelWidth) - 10]);
 
                     bar.append('rect')
                         .attr('transform', 'translate(' + labelWidth + ', 0)')
@@ -218,18 +211,11 @@
                         });
 
                     svg.append('g')
-                        .attr('transform', 'translate(' + (margin.right + labelWidth) + ',' + (height - axisMargin - margin.right) + ')')
+                        .attr('transform', 'translate(' + (margin.right + labelWidth) + ',' + (scope.heightAndWidth.height - axisMargin - margin.right) + ')')
                         .call(d3.axisBottom(scale));
                 };
 
-                var getHeightAndWidth = function() {
-                   // console.log('This is the elements height ' + element.height());
-                   // console.log('This is the elements width ' + element.width());
-                };
-
                 buildTable(scope.data);
-
-                //getHeightAndWidth();
             }
         };
     };
