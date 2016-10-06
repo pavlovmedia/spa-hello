@@ -1,5 +1,6 @@
 (function() {
     var d3 = require('d3');
+    var $ = require('jquery');
 
     var lineColors = [
         '#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0',
@@ -14,6 +15,8 @@
      * @type {number} The maximum allowed data series in the graph.
      */
     var MAX_ALLOWED_DATA_SERIES = 30;
+
+    var CANVAS_SELECTOR = '';
 
     /**
      * @constructor
@@ -30,36 +33,38 @@
         vm.element = $element[0];
         vm.window = $window;
 
+        vm.drawGraph();
+
         // TODO move function outside
-        vm.scope.$watch(function() { return vm.sourceData; }, function(newData) {
-            vm.log.info('sourceData changed', newData);
-            vm.drawGraph();
+        // vm.scope.$watch(function() { return vm.sourceData; }, function(newData) {
+        //     vm.log.info('sourceData changed', newData);
+        //     vm.drawGraph();
+        // }, true);
+
+        vm.scope.getWindowDimensions = function () {
+            return { 'h': vm.window.innerHeight, 'w': vm.window.innerWidth };
+        };
+        vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue, oldValue) {
+
+            vm.log.info("new dimension!: ", newValue, oldValue);
+
+            vm.scope.windowHeight = newValue.h;
+            vm.scope.windowWidth = newValue.w;
+
+            vm.scope.style = function () {
+                return {
+                    'height': (newValue.h - 100) + 'px',
+                    'width': (newValue.w - 100) + 'px'
+                };
+            };
+
         }, true);
 
-        // vm.scope.getWindowDimensions = function () {
-        //     return { 'h': vm.window.innerHeight, 'w': vm.window.innerWidth };
-        // };
-        // vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue, oldValue) {
-        //
-        //     vm.log.info("new dimension!: ", newValue, oldValue);
-        //
-        //     vm.scope.windowHeight = newValue.h;
-        //     vm.scope.windowWidth = newValue.w;
-        //
-        //     vm.scope.style = function () {
-        //         return {
-        //             'height': (newValue.h - 100) + 'px',
-        //             'width': (newValue.w - 100) + 'px'
-        //         };
-        //     };
-        //
-        // }, true);
-        //
-        // angular.element(vm.window).bind('resize', function () {
-        //     var test = vm.element;
-        //     vm.scope.$apply();
-        //     console.log('test');
-        // })
+        angular.element(vm.window).bind('resize', function () {
+            var test = vm.element;
+            vm.scope.$apply();
+            console.log('test');
+        })
     }
 
     // Parse the date / time
@@ -86,8 +91,12 @@
         var vm = this;
 
         // Set the dimensions of the canvas / graph
+        var $svgDiv = $('.myBarDirective');
+        var divWidth = $svgDiv.width();
+
+
         var margin = {top: 30, right: 20, bottom: 60, left: 50},
-            width = 600 - margin.left - margin.right,
+            width = divWidth - margin.left - margin.right,
             height = 270 - margin.top - margin.bottom;
 
 
@@ -107,11 +116,13 @@
             .y(function(d) { return y(d.close); });
 
         // Adds/Replaces the SVG canvas
-        var oldSvg = d3.select(vm.element).select('svg');
+        // var $svgDiv = $(vm.element);
+        var svgDiv = d3.select(vm.element).select('div > div .myBarDirective');
+        var oldSvg = svgDiv.select('svg');
         if(oldSvg) {
             oldSvg.remove();
         }
-        var svg = d3.select(vm.element)
+        var svg = svgDiv
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
