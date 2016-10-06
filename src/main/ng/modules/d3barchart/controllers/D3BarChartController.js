@@ -7,12 +7,18 @@
     function D3BarChartCtrl() {
         var vm = this;
 
-        //Bond Meta input exampls
+        //Bond Meta input examples
         vm.boundMetaVertical = false;
         vm.boundMetaBarsAllowed = 6;
         vm.boundMetaGridSize = 7;
+        vm.boundMetaHeightAndWidth = {
+            height: 500,
+            width: 960
+        };
+        vm.boundMetaHeight = 500;
+        vm.boundMetaWidth = 960;
         
-        // bound input data exampls
+        // bound input data example
         vm.dataPointOneActive = true;
         vm.dataPointOneName = "Batman";
         vm.dataPointOneValue = 3;

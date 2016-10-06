@@ -4,21 +4,26 @@
      */
 
     var d3 = require('d3');
+    var $ = require('jquery');
 
-    var d3BarChartDirective = function () {
+    var d3BarChartDirective = function ($window) {
+        'ngInject';
+
         return {
             restrict: 'E',
             controller: 'D3BarChartDirectiveCtrl as vm',
+            templateUrl: 'd3barchart/templates/d3-bar-chart-directive.html',
             scope: {
                 data: '=',
                 vertical: '=',
-                barsAllowed: '='
+                barsAllowed: '=',
+                heightAndWidth: '='
             },
             link: function (scope, element) {
 
                 var margin = {top: 20, right: 20, bottom: 30, left: 40};
-                var width = 960 - margin.left - margin.right;
-                var height = 500 - margin.top - margin.bottom;
+                var width = scope.heightAndWidth.width - margin.left - margin.right;
+                var height = scope.heightAndWidth.height - margin.top - margin.bottom;
                 var svg = undefined;
 
                 /**
@@ -74,10 +79,27 @@
                 }, true);
 
                 /**
+                 * Watch vertical changes then remove and rebuild the graph
+                 */
+                scope.$watch(function() {
+                    scope.heightAndWidth.height = element.clientHeight;
+                    scope.heightAndWidth.width = element.clientWidth;
+                    return scope.heightAndWidth.height + scope.heightAndWidth.width;
+                }, function () {
+                    console.log('here');
+
+                    buildTable();
+                });
+
+                element.bind('resize', function () {
+                    $scope.$apply();
+                });
+
+                /**
                  * Append the graph to the element
                  */
                 var createSvg = function () {
-                    svg = d3.select(element[0]).append('svg')
+                    svg = d3.select('#testId').append('svg')
                         .attr('width', width + margin.left + margin.right)
                         .attr('height', height + margin.top + margin.bottom)
                         .append('g')
@@ -200,7 +222,14 @@
                         .call(d3.axisBottom(scale));
                 };
 
+                var getHeightAndWidth = function() {
+                   // console.log('This is the elements height ' + element.height());
+                   // console.log('This is the elements width ' + element.width());
+                };
+
                 buildTable(scope.data);
+
+                //getHeightAndWidth();
             }
         };
     };
