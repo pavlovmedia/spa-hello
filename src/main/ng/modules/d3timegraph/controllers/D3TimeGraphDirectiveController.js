@@ -19,7 +19,7 @@
      * @constructor
      * @see http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5
      */
-    function D3TimeGraphDirectiveCtrl($element, $scope, $log) {
+    function D3TimeGraphDirectiveCtrl($element, $scope, $log, $window) {
         'ngInject';
 
         var vm = this;
@@ -28,13 +28,59 @@
         vm.log = $log;
         vm.scope = $scope;
         vm.element = $element[0];
+        vm.window = $window;
 
         // TODO move function outside
         vm.scope.$watch(function() { return vm.sourceData; }, function(newData) {
             vm.log.info('sourceData changed', newData);
             vm.drawGraph();
         }, true);
+
+        // vm.scope.getWindowDimensions = function () {
+        //     return { 'h': vm.window.innerHeight, 'w': vm.window.innerWidth };
+        // };
+        // vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue, oldValue) {
+        //
+        //     vm.log.info("new dimension!: ", newValue, oldValue);
+        //
+        //     vm.scope.windowHeight = newValue.h;
+        //     vm.scope.windowWidth = newValue.w;
+        //
+        //     vm.scope.style = function () {
+        //         return {
+        //             'height': (newValue.h - 100) + 'px',
+        //             'width': (newValue.w - 100) + 'px'
+        //         };
+        //     };
+        //
+        // }, true);
+        //
+        // angular.element(vm.window).bind('resize', function () {
+        //     var test = vm.element;
+        //     vm.scope.$apply();
+        //     console.log('test');
+        // })
     }
+
+    // Parse the date / time
+    var parseDate = d3.timeParse('%Y-%m-%d');
+
+    var getNestedDateExtent = function (data, key) {
+        // get the nested dates with the specified key
+        var dates = _.map(_.flatten(data), function(item) { return parseDate(item[key])});
+
+        // sort the dates
+        var sortedDates = _.sortBy(dates, function(date) { return date});
+
+        var minDate, maxDate;
+
+        if(sortedDates.length > 0) {
+            minDate = sortedDates[0];
+            maxDate = sortedDates[sortedDates.length - 1];
+        }
+
+        return [minDate, maxDate];
+    };
 
     D3TimeGraphDirectiveCtrl.prototype.drawGraph = function() {
         var vm = this;
@@ -44,8 +90,6 @@
             width = 600 - margin.left - margin.right,
             height = 270 - margin.top - margin.bottom;
 
-        // Parse the date / time
-        var parseDate = d3.timeParse('%Y-%m-%d');
 
         // Set the ranges
         var x = d3.scaleTime().range([0, width]);
@@ -75,21 +119,21 @@
             .attr('transform',
                 'translate(' + margin.left + ',' + margin.top + ')');
 
-        // Scale the range of the data
-        // y.domain([0, d3.max(cleanedData, function(d) { return d.close; })]);
-
+        // Scale the domain range of the data
         y.domain([
             d3.min(vm.sourceData, function(c) { return d3.min(c, function(d) { return d.y; }); }),
             d3.max(vm.sourceData, function(c) { return d3.max(c, function(d) { return d.y; }); })
         ]);
+
+        x.domain(getNestedDateExtent(vm.sourceData, 'x'));
+        //
+        // x.domain(d3.extent(cleanedData, function(d) { return d.date; }));
 
         _.forEach(vm.sourceData, function(data, index) {
             // remap the data
             var cleanedData = _.map(data, function(d) {
                 return  {date: parseDate(d.x), close: +d.y};
             });
-
-            x.domain(d3.extent(cleanedData, function(d) { return d.date; }));
 
             // Add the valueline path.
             svg.append('path')
