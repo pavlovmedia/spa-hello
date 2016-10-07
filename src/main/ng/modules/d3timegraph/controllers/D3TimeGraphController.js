@@ -8,7 +8,8 @@
         var vm = this;
 
         vm.sourceData = [];
-        vm.dataElementsToAdd = 1;
+        vm.numberOfSeries = 30;
+        vm.type = 'time';
     }
 
     /**
@@ -27,7 +28,7 @@
     D3TimeGraphCtrl.prototype.addRandomData = function () {
         var vm = this;
 
-        _.times(vm.dataElementsToAdd, function () {
+        _.times(vm.numberOfSeries, function () {
 
             var dateVariance = Math.floor(Math.random() * 200) + 1;
             var randomBoolean = Math.random() >= 0.5;
@@ -51,10 +52,13 @@
 
                 var x = dateString;
                 var y = startingPoint + Math.random() * variance * 2 - variance;
-                tempData.push({x: x, y: y});
+                tempData.push({x: x, y: y, xLabel: 'Label ' + j});
             }
 
-            vm.sourceData.push(tempData);
+            vm.sourceData.push({
+                points: tempData,
+                xType: 'date'
+            });
         });
     };
 

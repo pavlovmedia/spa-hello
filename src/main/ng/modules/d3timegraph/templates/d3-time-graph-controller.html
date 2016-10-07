@@ -3,7 +3,7 @@
     <div class="alert alert-info">Time Graph Directive Example[s]</div>
 
     <div class="row">
-        <div class="col-sm-7">
+        <div class="col-sm-8">
             <d3-time-graph-directive
                     test-variable="'rofl'"
                     source-data="vm.sourceData"
@@ -12,14 +12,17 @@
             >
             </d3-time-graph-directive>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <h3>Inputs</h3>
-
-            <label>
-                <input type="button" ng-click="vm.addRandomData()" value="Add data series">
+            <label> Select X-axis data type:
+                <input type="radio" name="x-data-type" ng-model="vm.type" value="date"> Date<br>
+                <input type="radio" name="x-data-type" ng-model="vm.type" value="time"> Time<br>
             </label>
             <label>
-                <input type="number" ng-model="vm.dataElementsToAdd"> Times
+                <input type="button" ng-click="vm.addRandomData()" value="# of Data Series">
+            </label>
+            <label>
+                <input type="number" ng-model="vm.numberOfSeries"> Set
             </label>
         </div>
     </div>
