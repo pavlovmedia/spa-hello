@@ -16,23 +16,24 @@
          * Gets the dimensions of the element
          * @returns {{height: (*|jQuery), width: (*|jQuery)}}
          */
-        // vm.scope.getWindowDimensions = function () {
-        //     return {'h': $(vm.element).height(), 'w': $(vm.element).width()};
-        // };
-        //
-        // /**
-        //  * Watch the dimensions of the element
-        //  */
-        // vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue) {
-        //     vm.scope.heightAndWidth.width = newValue.w;
-        // }, true);
-        //
-        // /**
-        //  * Binds the resize event to scope.apply to get around digest cycle
-        //  */
-        // angular.element(vm.window).bind('resize', function () {
-        //     vm.scope.$apply();
-        // });
+        vm.scope.getWindowDimensions = function () {
+            return {'h': $(vm.element).height(), 'w': $(vm.element).width()};
+        };
+
+        /**
+         * Watch the dimensions of the element
+         */
+        vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue) {
+            vm.scope.totalSize = newValue.w * 0.4;
+            vm.scope.buildChart();
+        }, true);
+
+        /**
+         * Binds the resize event to scope.apply to get around digest cycle
+         */
+        angular.element(vm.window).bind('resize', function () {
+            vm.scope.$apply();
+        });
     }
 
     var app = require('angular').module('swf.ng.app');
