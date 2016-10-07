@@ -12,60 +12,48 @@
         vm.boundMetaDonutChartSize = 360;
 
         // bound input data example
-        vm.dataPointOneActive = true;
         vm.dataPointOneName = "Batman";
         vm.dataPointOneValue = 3;
 
-        vm.dataPointTwoActive = true;
         vm.dataPointTwoName = "Joker";
         vm.dataPointTwoValue = 50;
 
-        vm.dataPointThreeActive = true;
         vm.dataPointThreeName = "Hulk";
         vm.dataPointThreeValue = 13;
 
-        vm.dataPointFourActive = true;
         vm.dataPointFourName = "Abomination";
         vm.dataPointFourValue = 30;
 
-        vm.dataPointFiveActive = true;
         vm.dataPointFiveName = "Iron Man";
         vm.dataPointFiveValue = 10;
 
-        vm.dataPointSixActive = true;
         vm.dataPointSixName = "Mandarin";
         vm.dataPointSixValue = 19;
 
         vm.boundDataSet = [
             {
                 name: vm.dataPointOneName,
-                value: vm.dataPointOneValue,
-                active: vm.dataPointOneActive
+                value: vm.dataPointOneValue
             },
             {
                 name: vm.dataPointTwoName,
-                value: vm.dataPointTwoValue,
-                active: vm.dataPointTwoActive
+                value: vm.dataPointTwoValue
             },
             {
                 name: vm.dataPointThreeName,
-                value: vm.dataPointThreeValue,
-                active: vm.dataPointThreeActive
+                value: vm.dataPointThreeValue
             },
             {
                 name: vm.dataPointFourName,
-                value: vm.dataPointFourValue,
-                active: vm.dataPointFourActive
+                value: vm.dataPointFourValue
             },
             {
                 name: vm.dataPointFiveName,
-                value: vm.dataPointFiveValue,
-                active: vm.dataPointFiveActive
+                value: vm.dataPointFiveValue
             },
             {
                 name: vm.dataPointSixName,
-                value: vm.dataPointSixValue,
-                active: vm.dataPointSixActive
+                value: vm.dataPointSixValue
             }
         ];
     }
