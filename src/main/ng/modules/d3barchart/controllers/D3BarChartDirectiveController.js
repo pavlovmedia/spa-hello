@@ -1,13 +1,11 @@
 (function () {
-    var d3 = require('d3');
+    var $ = require('jquery');
 
     /**
      * @constructor
      */
     function D3BarChartDirectiveCtrl($scope, $element, $window) {
         'ngInject';
-
-        var $ = require('jquery');
 
         var vm = this;
         vm.scope = $scope;
@@ -26,7 +24,8 @@
          * Watch the dimensions of the element
          */
         vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue) {
-            vm.scope.heightAndWidth.width = newValue.w;
+            vm.scope.width = newValue.w;
+            vm.scope.buildTable();
         }, true);
 
         /**

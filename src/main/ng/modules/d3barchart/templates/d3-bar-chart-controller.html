@@ -6,9 +6,11 @@
             data="vm.boundDataSet"
             vertical="vm.boundMetaVertical"
             bars-allowed="vm.boundMetaBarsAllowed"
-            height-and-width="vm.boundMetaHeightAndWidth"
+            height="vm.boundMetaHeight"
+            width="vm.boundMetaWidth"
             class="col-sm-7">
     </d-3-bar-chart-directive>
+
 
     <div class="col-sm-5">
         <h3>Meta Inputs</h3>
@@ -16,8 +18,8 @@
         <label>Vertical</label> <input type="checkbox" ng-model="vm.boundMetaVertical"><br/>
         <label>Number of Bars Allowed</label> <input type="number" max="6" min="0"
                                                      ng-model="vm.boundMetaBarsAllowed"><br/>
-        <label>Bar Chart Height</label> <input type="number" ng-model="vm.boundMetaHeightAndWidth.height "><br/>
-        <label>Bar Chart width</label> <input type="number" ng-model="vm.boundMetaHeightAndWidth.width"><br/>
+        <label>Bar Chart Height</label> <input type="number" ng-model="vm.boundMetaHeight"><br/>
+        <label>Bar Chart width</label> <input type="number" ng-model="vm.boundMetaWidth"><br/>
 
         <h3>Data Inputs</h3>
 

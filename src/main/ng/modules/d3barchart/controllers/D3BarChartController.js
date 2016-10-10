@@ -8,12 +8,10 @@
         var vm = this;
 
         //Bond Meta input examples
-        vm.boundMetaVertical = true;
-        vm.boundMetaBarsAllowed = 6;
-        vm.boundMetaHeightAndWidth = {
-            height: 500,
-            width: 960
-        };
+        vm.boundMetaVertical = true; //todo remove watch on resize
+        vm.boundMetaBarsAllowed = 6;// as a dev i want to the user to specify the charts dimensions so that the chart does not resize on window two options static or dynamic
+        vm.boundMetaWidth = 960;
+        vm.boundMetaHeight = 500;
 
         // bound input data example
         vm.dataPointOneActive = true;
