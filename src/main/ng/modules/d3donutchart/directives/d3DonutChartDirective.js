@@ -23,7 +23,20 @@
                 var selector = d3.select(element[0]).select('div > div .donut');
                 var radiusScale = 0.4;
 
+                /**
+                 * Looks for a svg element, if it's present then delete it
+                 */
+                var removeOldChart =  function () {
+                    var oldSvg = selector.select('svg');
+                    if(oldSvg) {
+                        oldSvg.remove();
+                    }
+                };
+
                 var buildChart = function () {
+
+                    // check for an older chart and remove
+                    removeOldChart();
 
                     /**
                      * Select the initial object and append the svg object to it. Set the width and height of the chart.
@@ -118,16 +131,6 @@
                             return d;
                         });
                 };
-
-                /**
-                 * Looks for a svg element, if it's present then delete it
-                 */
-                var removeOldGraph =  function () {
-                    var oldSvg = selector.select('svg');
-                    if(oldSvg) {
-                        oldSvg.remove();
-                    }
-                };
                 
                 buildChart();
 
@@ -136,7 +139,6 @@
                  */
                 scope.$watch('data', function() {
                     // If there is already a chart remove it
-                    removeOldGraph();
                     buildChart();
                 }, true);
 
@@ -145,7 +147,6 @@
                  */
                 scope.$watch('totalSize', function() {
                     // If there is already a chart remove it
-                    removeOldGraph();
                     buildChart();
                 }, true);
 
