@@ -52,6 +52,7 @@
         vm.graphHeight = undefined;
         vm.graphWidth = undefined;
 
+        // todo make these more generic
         vm.$svgDiv = $('.myBarDirective');
         vm.svgDiv = d3.select(vm.element).select('div > div .myBarDirective');
     }
