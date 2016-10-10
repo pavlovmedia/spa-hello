@@ -2,7 +2,7 @@
     var $ = require('jquery');
 
     /**
-     * @constructor
+     * Watches for window resize then forces a digest cycle
      */
     function D3BarChartDirectiveCtrl($scope, $window) {
         'ngInject';

@@ -1,11 +1,11 @@
 (function () {
-    /**
-     * generates the tables shown in the import pages
-     */
 
     var d3 = require('d3');
     var $ = require('jquery');
 
+    /**
+     * generates the tables shown in the import pages
+     */
     var d3BarChartDirective = function () {
         return {
             restrict: 'E',
@@ -26,28 +26,28 @@
                 var height = scope.height - margin.top - margin.bottom;
                 var svg = undefined;
                 var selector = d3.select(element[0]).select('div > div .testClass');
+                var debounceTime = 50;
+
+                var debouncedRedraw = _.debounce(function() {
+                    buildTable(scope.data);
+                }, debounceTime);
 
                 /**
                  * removes and rebuilds the graph
                  */
                 function buildTable() {
                     var onlyActive = [];
-                    var finalArray = [];
 
-                    _.forEach(scope.data, function (data) {
+                    _.forEach(scope.data, function (data, index) {
+
+                        if(index + 1 > scope.barsAllowed) {
+                            return false;
+                        }
+
                         if (data.active) {
                             onlyActive.push(data);
                         }
                     });
-
-                    for (var i = 0; i < scope.barsAllowed; i++) {
-
-                        if (!onlyActive[i]) {
-                            break;
-                        }
-
-                        finalArray.push(onlyActive[i]);
-                    }
 
                     var oldSvg = selector.select('svg');
                     if(oldSvg) {
@@ -55,9 +55,9 @@
                     }
 
                     if (scope.vertical) {
-                        buildVerticalBarGraph(finalArray);
+                        buildVerticalBarGraph(onlyActive);
                     } else {
-                        buildHorizontalBarGraph(finalArray);
+                        buildHorizontalBarGraph(onlyActive);
                     }
                 }
 
@@ -65,21 +65,21 @@
                  * Watch the data object for changes then remove and rebuild the graph
                  */
                 scope.$watch('data', function () {
-                    buildTable();
+                    debouncedRedraw();
                 }, true);
 
                 /**
                  * Watch vertical changes then remove and rebuild the graph
                  */
                 scope.$watch('vertical', function () {
-                    buildTable();
+                    debouncedRedraw();
                 }, true);
 
                 /**
                  * Watch vertical changes then remove and rebuild the graph
                  */
                 scope.$watch('barsAllowed', function () {
-                    buildTable();
+                    debouncedRedraw();
                 }, true);
 
                 /**
@@ -92,8 +92,8 @@
                         return;
                     }
                     scope.width = $(element[0]).width();
-                    buildTable();
-                }, true);
+                    debouncedRedraw();
+                });
 
                 /**
                  * Watch height and width changes then remove and rebuild the graph
@@ -104,8 +104,8 @@
                     if (!scope.setManually) {
                         return;
                     }
-                    buildTable();
-                }, true);
+                    debouncedRedraw();
+                });
 
                 /**
                  * Append the graph to the element
@@ -132,6 +132,9 @@
                     var x = d3.scaleBand().range([0, scope.width - 20]).padding(0.1);
                     var y = d3.scaleLinear().range([scope.height, 0]);
 
+                    /**
+                     * Adds up all data in order to scale the graph
+                     */
                     _.forEach(graphData, function (data) {
                         data.value = +data.value;
                     });
