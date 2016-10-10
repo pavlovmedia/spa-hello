@@ -13,22 +13,6 @@
         vm.window = $window;
 
         /**
-         * Gets the dimensions of the element
-         * @returns {{height: (*|jQuery), width: (*|jQuery)}}
-         */
-        vm.scope.getWindowDimensions = function () {
-            return {'h': $(vm.element).height(), 'w': $(vm.element).width()};
-        };
-
-        /**
-         * Watch the dimensions of the element
-         */
-        vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue) {
-            vm.scope.width = newValue.w;
-            vm.scope.buildTable();
-        }, true);
-
-        /**
          * Binds the resize event to scope.apply to get around digest cycle
          */
         angular.element(vm.window).bind('resize', function () {
