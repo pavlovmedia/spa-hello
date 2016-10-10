@@ -71,7 +71,7 @@
                     /**
                      * Extract the numerical data from each entry, don't sort (default is to sort) order will be defined
                      * by the order we put in the data
-                     * @type {*|Array.<T>} The extracted data used to build the cahrt
+                     * @type {*|Array.<T>} The extracted data used to build the chart
                      */
                     var pie = d3.pie()
                         .value(function (extractedData) {
