@@ -2,7 +2,7 @@
     var d3 = require('d3');
     var $ = require('jquery');
 
-    var lineColors = [
+    var LINE_COLORS = [
         '#7fc97f','#beaed4','#fdc086','#a6611a','#386cb0',
         '#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e',
         '#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99',
@@ -39,7 +39,7 @@
     var CANVAS_SELECTOR = '';
 
     /**
-     * @constructor
+     * @constructor D3 Time Graph directive controller constructor.
      * @see http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5
      */
     function D3TimeGraphDirectiveCtrl($element, $scope, $log, $window) {
@@ -62,6 +62,7 @@
         vm.graphHeight = undefined;
         vm.graphWidth = undefined;
         vm.legendWidth = undefined;
+        vm.colors = undefined;
 
         // todo make these more generic
         vm.$svgDiv = $('.myBarDirective');
@@ -189,7 +190,8 @@
             // Add the valueline path.
             vm.svg.append('path')
                 .attr('class', 'line')
-                .attr('stroke', lineColors[index])
+                // .attr('stroke', LINE_COLORS[index]) TODO remove
+                .attr('stroke', vm.colors(index))
                 .attr('stroke-width', 2)
                 .attr('fill', 'none')
                 .attr('d', valueLine(cleanedData));
@@ -210,6 +212,49 @@
         vm.svg.append('g')
             .attr('class', 'y axis')
             .call(vm.yAxis);
+
+        // draw the legend
+        // draw the legend
+        var legendRectSize = 20;
+        var legendSpacing = 4;
+
+        /**
+         * Select the legend, select the domain of colors created earlier in the path fill function. Give each
+         * 'g' element a legend class. Then center the legend based on the size of the chart. The color domain
+         * is an array of all names defined in the fill function.
+         */
+        var legend = vm.svg.selectAll('.legend')
+            .data(vm.colors.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function (data, index) {
+                var legendHeight = vm.graphHeight;
+                var offset = legendHeight / vm.colors.domain().length;
+                var horizontalPosition = vm.graphWidth;
+                var verticalPosition = index * offset;
+                return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
+            });
+
+        /**
+         * Add the legend squares to the chart
+         */
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', vm.colors)
+            .style('stroke', vm.colors);
+
+        /**
+         * Add the legend test to the chart
+         */
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing)
+            .text(function (d) {
+                return d;
+            });
+
     };
 
     /**
@@ -245,6 +290,8 @@
             .attr('transform',
                 'translate(' + MARGINS.left + ',' + MARGINS.top + ')');
 
+        vm.colors = d3.scaleOrdinal(LINE_COLORS);
+
         // Set the ranges
         vm.x = d3.scaleTime().range([0, vm.graphWidth]);
         vm.y = d3.scaleLinear().range([vm.graphHeight, 0]);
@@ -257,49 +304,10 @@
         vm.updateData();
     };
 
-    D3TimeGraphDirectiveCtrl.prototype.addLegend = function() {
-        var vm = this;
-
-        var legendRectSize = 20;
-        var legendSpacing = 4;
-
-        /**
-         * Select the legend, select the domain of colors created earlier in the path fill function. Give each
-         * 'g' element a legend class. Then center the legend based on the size of the chart. The color domain
-         * is an array of all names defined in the fill function.
-         */
-        var legend = svg.selectAll('.legend')
-            .data(color.domain())
-            .enter()
-            .append('g')
-            .attr('class', 'legend')
-            .attr('transform', function (data, index) {
-                var legendHeight = vm.height;
-                var offset = legendHeight * color.domain().length / 2;
-                var horizontalPosition = scope.totalSize - (scope.totalSize * 0.4);
-                var verticalPosition = index * legendHeight - offset;
-                return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
-            });
-
-        /**
-         * Add the legend squares to the chart
-         */
-        legend.append('rect')
-            .attr('width', legendRectSize)
-            .attr('height', legendRectSize)
-            .style('fill', color)
-            .style('stroke', color);
-
-        /**
-         * Add the legend test to the chart
-         */
-        legend.append('text')
-            .attr('x', legendRectSize + legendSpacing)
-            .attr('y', legendRectSize - legendSpacing)
-            .text(function (d) {
-                return d;
-            });
-    };
+    // TODO consider removeal D3TimeGraphDirectiveCtrl.prototype.addLegend = function() {
+    //     var vm = this;
+    //
+    // };
 
     var app = require('angular').module('swf.ng.app');
     app.controller('D3TimeGraphDirectiveCtrl', D3TimeGraphDirectiveCtrl);

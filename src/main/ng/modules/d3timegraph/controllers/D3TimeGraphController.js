@@ -34,7 +34,7 @@
         // reset source data
         vm.sourceData = [];
 
-        _.times(vm.numberOfSeries, function () {
+        _.times(vm.numberOfSeries, function (index) {
 
             var dateVariance = Math.floor(Math.random() * 200) + 1;
             var randomBoolean = Math.random() >= 0.5;
@@ -58,12 +58,12 @@
 
                 var x = dateString;
                 var y = startingPoint + Math.random() * variance * 2 - variance;
-                tempData.push({x: x, y: y, xLabel: 'Label ' + j});
+                tempData.push({x: x, y: y});
             }
 
             vm.sourceData.push({
                 points: tempData,
-                xType: 'date'
+                xLabel: 'Label ' + (index + 1)
             });
         });
     };
