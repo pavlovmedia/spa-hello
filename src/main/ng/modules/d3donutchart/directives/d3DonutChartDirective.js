@@ -22,6 +22,14 @@
                 var legendSpacing = 4;
                 var selector = d3.select(element[0]).select('div > div .donut');
                 var radiusScale = 0.4;
+                var debounceTime = 50;
+
+                /**
+                 * Sets a debounce so the graph doesn't get updated to many times in a row
+                 */
+                var debouncedRedraw = _.debounce(function() {
+                    buildChart(scope.data);
+                }, debounceTime);
 
                 /**
                  * Looks for a svg element, if it's present then delete it
@@ -138,16 +146,14 @@
                  * Update chart if data updates
                  */
                 scope.$watch('data', function() {
-                    // If there is already a chart remove it
-                    buildChart();
+                    debouncedRedraw();
                 }, true);
 
                 /**
                  * Update chart if the total size of the chart changes
                  */
                 scope.$watch('totalSize', function() {
-                    // If there is already a chart remove it
-                    buildChart();
+                    debouncedRedraw();
                 }, true);
 
             }
