@@ -8,6 +8,7 @@
             bars-allowed="vm.boundMetaBarsAllowed"
             height="vm.boundMetaHeight"
             width="vm.boundMetaWidth"
+            set-manually="vm.setManually"
             class="col-sm-7">
     </d-3-bar-chart-directive>
 
@@ -20,6 +21,7 @@
                                                      ng-model="vm.boundMetaBarsAllowed"><br/>
         <label>Bar Chart Height</label> <input type="number" ng-model="vm.boundMetaHeight"><br/>
         <label>Bar Chart width</label> <input type="number" ng-model="vm.boundMetaWidth"><br/>
+        <label>Set Height and Width Manually</label> <input type="checkbox" ng-model="vm.setManually"><br/>
 
         <h3>Data Inputs</h3>
 

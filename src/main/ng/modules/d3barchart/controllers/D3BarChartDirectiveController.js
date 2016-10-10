@@ -4,12 +4,11 @@
     /**
      * @constructor
      */
-    function D3BarChartDirectiveCtrl($scope, $element, $window) {
+    function D3BarChartDirectiveCtrl($scope, $window) {
         'ngInject';
 
         var vm = this;
         vm.scope = $scope;
-        vm.element = $element;
         vm.window = $window;
 
         /**

@@ -12,6 +12,7 @@
         vm.boundMetaBarsAllowed = 6;// as a dev i want to the user to specify the charts dimensions so that the chart does not resize on window two options static or dynamic
         vm.boundMetaWidth = 960;
         vm.boundMetaHeight = 500;
+        vm.setManually = false;
 
         // bound input data example
         vm.dataPointOneActive = true;
