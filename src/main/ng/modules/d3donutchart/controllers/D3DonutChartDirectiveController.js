@@ -25,7 +25,6 @@
          */
         vm.scope.$watch(vm.scope.getWindowDimensions, function (newValue) {
             vm.scope.totalSize = newValue.w * 0.4;
-            vm.scope.buildChart();
         }, true);
 
         /**

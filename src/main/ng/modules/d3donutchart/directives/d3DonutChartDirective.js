@@ -15,11 +15,12 @@
                 totalSize: '='
             },
 
-            link: function (scope) {
+            link: function (scope, element) {
 
                 // Set the set of the legend squares and spacing between
                 var legendRectSize = 18;
                 var legendSpacing = 4;
+                var selector = d3.select(element[0]).select('div > div .donut');
 
                 var buildChart = function () {
 
@@ -27,7 +28,7 @@
                      * Select the initial object and append the svg object to it. Set the width and height of the chart.
                      * Center the 'g' element to the center of the circle.
                      */
-                    var svg = d3.select('#donut')
+                    var svg = selector
                         .append('svg')
                         .attr('width', scope.totalSize * 2)
                         .attr('height', scope.totalSize)
@@ -117,17 +118,33 @@
                         });
                 };
 
+                /**
+                 * Looks for a svg element, if it's present then delete it
+                 */
+                var removeOldGraph =  function () {
+                    var oldSvg = selector.select('svg');
+                    if(oldSvg) {
+                        oldSvg.remove();
+                    }
+                };
+                
                 buildChart();
 
+                /**
+                 * Update chart if data updates
+                 */
                 scope.$watch('data', function() {
                     // If there is already a chart remove it
-                    d3.select('svg').remove();
+                    removeOldGraph();
                     buildChart();
                 }, true);
 
+                /**
+                 * Update chart if the total size of the chart changes
+                 */
                 scope.$watch('totalSize', function() {
                     // If there is already a chart remove it
-                    d3.select('svg').remove();
+                    removeOldGraph();
                     buildChart();
                 }, true);
 
