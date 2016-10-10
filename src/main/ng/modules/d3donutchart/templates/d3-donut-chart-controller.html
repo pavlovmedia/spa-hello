@@ -1,0 +1,43 @@
+<div>
+    <br/>
+    <div class="alert alert-info">Bar Chart Directive Example</div>
+
+    <d-3-donut-chart-directive
+            data="vm.boundDataSet"
+            total-size="vm.boundMetaDonutChartSize"
+            class="col-sm-7">
+    </d-3-donut-chart-directive>
+
+    <div class="col-sm-5">
+        <h3>Meta Data</h3>
+
+        <label>Total Chart Size: {{ vm.boundMetaDonutChartSize }}</label>
+
+        <h3>Data Inputs</h3>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[0].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[0].value"><br/><br/>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[1].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[1].value"><br/><br/>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[2].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[2].value"><br/><br/>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[3].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[3].value"><br/><br/>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[4].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[4].value"><br/><br/>
+
+        <label>Bar Label</label> <input type="text" ng-model="vm.boundDataSet[5].name">
+        <label>Bar Data</label> <input type="number" ng-model="vm.boundDataSet[5].value"><br/><br/>
+
+    </div>
+    <div class="col-sm-12">
+        <h3>Mock Data</h3>
+        Mock data displayed in pure form <br/><br/>
+
+        {{vm.boundDataSet | json : 6}} <br/><br/>
+    </div>
+</div>
