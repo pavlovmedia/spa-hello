@@ -16,6 +16,7 @@
     "swf-swagger-kit": "git+ssh://git@github.com/pavlovmedia/swf-swagger-kit.git"
   },
   "dependencies": {
+    "d3": "^4.2.6",
     "karma": "^0.13.22"
   }
 }
