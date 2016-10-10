@@ -21,6 +21,7 @@
                 var legendRectSize = 18;
                 var legendSpacing = 4;
                 var selector = d3.select(element[0]).select('div > div .donut');
+                var radiusScale = 0.4;
 
                 var buildChart = function () {
 
@@ -42,10 +43,10 @@
                     var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
                     // Set the radius of the chart
-                    var radius = Math.min(scope.totalSize, scope.totalSize) / 2;
+                    var radius = scope.totalSize / 2;
 
                     // Set the radius of the donut hole
-                    var donutWidth = radius * 0.4;
+                    var donutWidth = radius * radiusScale;
 
                     /**
                      * Set the inner and outer radius of the chart

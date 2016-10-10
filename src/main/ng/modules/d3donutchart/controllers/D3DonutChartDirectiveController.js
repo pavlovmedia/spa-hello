@@ -1,11 +1,12 @@
 (function () {
+
+    var $ = require('jquery');
+
     /**
      * @constructor
      */
     function D3DonutChartDirectiveCtrl($scope, $element, $window) {
         'ngInject';
-
-        var $ = require('jquery');
 
         var vm = this;
         vm.scope = $scope;
