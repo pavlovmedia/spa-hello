@@ -5,31 +5,37 @@
     <div class="row">
         <div class="col-sm-8">
             <d3-time-graph-directive
-                    test-variable="'rofl'"
                     source-data="vm.sourceData"
-                    height="'500px'"
-                    width="'600px'"
+                    height="vm.height"
+                    width="vm.width"
+                    type="vm.type"
+                    show-legend="vm.showLegend"
             >
             </d3-time-graph-directive>
         </div>
         <div class="col-sm-4">
             <h3>Inputs</h3>
-            <label> Select X-axis data type:
+            <label><h4>Set Size:</h4><br>
+                Width: <input type="number" ng-model="vm.width" value=""><br>
+                Height: <input type="number" ng-model="vm.height" value=""><br>
+            </label><br>
+            <label><h4>Select X-axis data type:</h4><br>
                 <input type="radio" name="x-data-type" ng-model="vm.type" value="date"> Date<br>
                 <input type="radio" name="x-data-type" ng-model="vm.type" value="time"> Time<br>
-            </label>
-            <label>
-                <input type="button" ng-click="vm.addRandomData()" value="# of Data Series">
-            </label>
-            <label>
-                <input type="number" ng-model="vm.numberOfSeries"> Set
+            </label><br>
+            <label><h4>Legend:</h4><br>
+                Show: <input type="checkbox" name="x-data-type" ng-model="vm.showLegend" value="time"><br>
+            </label><br>
+            <label><h4># of Data Series</h4>
+                <input type="number" ng-model="vm.numberOfSeries"> <input type="button" ng-click="vm.addRandomData()" value="Set"><br>
             </label>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
             Raw Data:
-            <pre>{{vm.sourceData | json}}</pre>
+            <!--<pre>{{vm.sourceData | json}}</pre>-->
+            {{vm.sourceData}}
         </div>
     </div>
 </div>

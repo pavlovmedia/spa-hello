@@ -22,9 +22,19 @@
     var WIDTH_TO_HEIGHT_RATIO = 16 / 9;
 
     /**
-     * @type {{top: number, right: number, bottom: number, left: number}} margins of the time graph
+     * @type {number} Amount of time to debounce, in milliseconds, calls to the SVG redraw function.
+     */
+    var DEBOUNCE_TIME_MS = 200;
+
+    /**
+     * @type {{top: number, right: number, bottom: number, left: number}} margins (px) of the time graph
      */
     var MARGINS = {top: 30, right: 20, bottom: 60, left: 50};
+
+    /**
+     * @type {number}
+     */
+    var LEGEND_WIDTH_PERCENT = 30;
 
     var CANVAS_SELECTOR = '';
 
@@ -51,6 +61,7 @@
         vm.svg = undefined;
         vm.graphHeight = undefined;
         vm.graphWidth = undefined;
+        vm.legendWidth = undefined;
 
         // todo make these more generic
         vm.$svgDiv = $('.myBarDirective');
@@ -93,11 +104,10 @@
     D3TimeGraphDirectiveCtrl.prototype.initialize = function() {
         var vm = this;
 
-        // todo make 200 a constant
-        // debounced redraw function, so it can't be called too quickly.
+        // debounced redraw function, so it can't be called too frequently consecutively.
         var debouncedRedraw = _.debounce(function() {
             vm.redraw();
-        }, 200);
+        }, DEBOUNCE_TIME_MS);
 
         // on window size change, redraw
         vm.scope.$watch(function() { return vm.window.innerHeight + vm.window.innerWidth; }, function() {
@@ -110,11 +120,36 @@
             debouncedRedraw();
         }, true);
 
+        // on source data change, redraw
+        vm.scope.$watch(function() { return vm.showLegend; }, function(newData) {
+            vm.log.info('show legend changed', newData);
+            debouncedRedraw();
+        }, true);
+
+        // on height/width change, redraw
+        vm.scope.$watch(function() { return vm.height + vm.width; }, function(newData) {
+            vm.log.info('size changed', newData);
+            debouncedRedraw();
+        }, true);
+
         // watch resize events
         angular.element(vm.window).bind('resize', function () {
-            vm.scope.$apply();
             vm.log.info('resize');
+            vm.scope.$apply();
         });
+    };
+
+    /**
+     * @returns {{width: number, height: number}} Object of width and height.
+     */
+    D3TimeGraphDirectiveCtrl.prototype.getSize = function() {
+        var vm = this;
+
+        var width = vm.width || vm.$svgDiv.width();
+        var height = vm.height || (width / WIDTH_TO_HEIGHT_RATIO);
+
+
+        return {width: width, height: height};
     };
 
     /**
@@ -135,7 +170,6 @@
         vm.x.domain(getNestedDateExtent(vm.sourceData, 'x'));
 
         var valueLine = d3.line()
-            .curve(d3.curveBasis)
             .x(function(d) { return vm.x(d.date); })
             .y(function(d) { return vm.y(d.close); });
 
@@ -184,11 +218,18 @@
     D3TimeGraphDirectiveCtrl.prototype.redraw = function() {
         var vm = this;
 
-        // Set the dimensions of the canvas / graph
-        var divWidth = vm.$svgDiv.width();
+        // Set the dimensions of the canvas / graph.
+        var size = vm.getSize();
 
-        vm.graphWidth = divWidth - MARGINS.left - MARGINS.right;
-        vm.graphHeight = (divWidth / WIDTH_TO_HEIGHT_RATIO) - MARGINS.top - MARGINS.bottom;
+        vm.graphWidth = size.width - MARGINS.left - MARGINS.right;
+        vm.graphHeight = size.height - MARGINS.top - MARGINS.bottom;
+
+        // determine if we're adding a legend
+        if (vm.showLegend) {
+            // set aside a portion of the graph space for the legend
+            vm.legendWidth = LEGEND_WIDTH_PERCENT * 0.01 * vm.graphWidth;
+            vm.graphWidth -= vm.legendWidth;
+        }
 
         // Adds/Replaces the SVG canvas
         // var $svgDiv = $(vm.element);
@@ -198,8 +239,8 @@
         }
         vm.svg = vm.svgDiv
             .append('svg')
-            .attr('width', vm.graphWidth + MARGINS.left + MARGINS.right)
-            .attr('height', vm.graphHeight + MARGINS.top + MARGINS.bottom)
+            .attr('width', size.width)
+            .attr('height', size.height)
             .append('g')
             .attr('transform',
                 'translate(' + MARGINS.left + ',' + MARGINS.top + ')');
@@ -214,6 +255,50 @@
 
         // now update with Data
         vm.updateData();
+    };
+
+    D3TimeGraphDirectiveCtrl.prototype.addLegend = function() {
+        var vm = this;
+
+        var legendRectSize = 20;
+        var legendSpacing = 4;
+
+        /**
+         * Select the legend, select the domain of colors created earlier in the path fill function. Give each
+         * 'g' element a legend class. Then center the legend based on the size of the chart. The color domain
+         * is an array of all names defined in the fill function.
+         */
+        var legend = svg.selectAll('.legend')
+            .data(color.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function (data, index) {
+                var legendHeight = vm.height;
+                var offset = legendHeight * color.domain().length / 2;
+                var horizontalPosition = scope.totalSize - (scope.totalSize * 0.4);
+                var verticalPosition = index * legendHeight - offset;
+                return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
+            });
+
+        /**
+         * Add the legend squares to the chart
+         */
+        legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)
+            .style('fill', color)
+            .style('stroke', color);
+
+        /**
+         * Add the legend test to the chart
+         */
+        legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing)
+            .text(function (d) {
+                return d;
+            });
     };
 
     var app = require('angular').module('swf.ng.app');

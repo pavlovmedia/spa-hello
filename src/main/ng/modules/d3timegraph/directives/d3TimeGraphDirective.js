@@ -9,7 +9,8 @@
             controller: 'D3TimeGraphDirectiveCtrl as vm',
             scope: {},
             bindToController: {
-                testVariable: '=',
+                showLegend: '=',
+                type: '=',
                 sourceData: '=',
                 height: '=',
                 width: '='

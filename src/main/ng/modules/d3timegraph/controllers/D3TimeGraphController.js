@@ -8,8 +8,11 @@
         var vm = this;
 
         vm.sourceData = [];
-        vm.numberOfSeries = 30;
+        vm.numberOfSeries = 5;
         vm.type = 'time';
+        vm.width = undefined;
+        vm.height = undefined;
+        vm.showLegend = false;
     }
 
     /**
@@ -27,6 +30,9 @@
      */
     D3TimeGraphCtrl.prototype.addRandomData = function () {
         var vm = this;
+
+        // reset source data
+        vm.sourceData = [];
 
         _.times(vm.numberOfSeries, function () {
 
