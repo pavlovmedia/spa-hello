@@ -50,8 +50,20 @@
             var tempData = [];
             var startingPoint = Math.random() * 100000;
             for (var j = 0; j < randomNumberOfDays; j++) {
-                date.setDate(date.getDate() - 1); // subtract a day
+                // update the date or time based on type
                 var dateString = date.toISOString().split('T')[0];
+                switch (vm.type) {
+                    case 'time':
+                        date.setMinutes(date.getMinutes() - 1); // subtract an hour
+                        dateString = date.toISOString();
+                        break;
+                    case 'date':
+                        date.setDate(date.getDate() - 1); // subtract a day
+                        dateString = date.toISOString().split('T')[0];
+                        break;
+                    default:
+                        throw "Unsupported Type";
+                }
 
                 // the range at which the data can vary below or above the original value
                 var variance = Math.random() * 10000;

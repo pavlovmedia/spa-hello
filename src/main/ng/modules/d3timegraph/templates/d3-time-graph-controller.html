@@ -15,18 +15,18 @@
         </div>
         <div class="col-sm-4">
             <h3>Inputs</h3>
-            <label><h4>Set Size:</h4><br>
+            <label><strong>Set Size:</strong><br>
                 Width: <input type="number" ng-model="vm.width" value=""><br>
                 Height: <input type="number" ng-model="vm.height" value=""><br>
             </label><br>
-            <label><h4>Select X-axis data type:</h4><br>
-                <input type="radio" name="x-data-type" ng-model="vm.type" value="date"> Date<br>
-                <input type="radio" name="x-data-type" ng-model="vm.type" value="time"> Time<br>
+            <label><strong>Select X-axis data type:</strong><br>
+                <input type="radio" name="x-data-type" ng-model="vm.type" value="date" ng-change="vm.addRandomData()"> Date<br>
+                <input type="radio" name="x-data-type" ng-model="vm.type" value="time" ng-change="vm.addRandomData()"> Time<br>
             </label><br>
-            <label><h4>Legend:</h4><br>
+            <label><strong>Legend:</strong><br>
                 Show: <input type="checkbox" name="x-data-type" ng-model="vm.showLegend" value="time"><br>
             </label><br>
-            <label><h4># of Data Series</h4>
+            <label><strong># of Data Series</strong><br>
                 <input type="number" ng-model="vm.numberOfSeries"> <input type="button" ng-click="vm.addRandomData()" value="Set"><br>
             </label>
         </div>

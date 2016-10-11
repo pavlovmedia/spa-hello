@@ -1,6 +1,5 @@
 (function() {
     var d3 = require('d3');
-    var $ = require('jquery');
 
     var LINE_COLORS = [
         '#7fc97f','#beaed4','#fdc086','#a6611a','#386cb0',
@@ -32,11 +31,9 @@
     var MARGINS = {top: 30, right: 20, bottom: 60, left: 50};
 
     /**
-     * @type {number}
+     * @type {number} percentage of the time graph width to be used for the legend (if enabled)
      */
-    var LEGEND_WIDTH_PERCENT = 30;
-
-    var CANVAS_SELECTOR = '';
+    var LEGEND_WIDTH_PERCENT = 20;
 
     /**
      * @constructor D3 Time Graph directive controller constructor.
@@ -64,8 +61,6 @@
         vm.legendWidth = undefined;
         vm.colors = undefined;
 
-        // todo make these more generic
-        vm.$svgDiv = $('.myBarDirective');
         vm.svgDiv = d3.select(vm.element).select('div > div .myBarDirective');
     }
 
@@ -75,16 +70,32 @@
     var parseDate = d3.timeParse('%Y-%m-%d');
 
     /**
+     * D3 Parse ISO time function.
+     */
+    var parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
+
+    /**
      * Get the extent (minimum, maximum) of the all of the data series dates.
+     * @param type if the data is of type 'time' or 'date'
      * @param data data to find smallest and largest date.
      * @param key which key of the data series contains the date.
      * @returns Array array with two date, smallest and largest respectively.
      */
-    var getNestedDateExtent = function (data, key) {
+    var getNestedDateExtent = function (type, data, key) {
         // get the nested dates with the specified key
         // get all the data series points
-        var points = _.reduce(data, function(acc, item) {acc.push(item.points); return acc;}, [])
-        var dates = _.map(_.flatten(points), function(item) { return parseDate(item[key])});
+        var points = _.reduce(data, function(acc, item) {acc.push(item.points); return acc;}, []);
+        var dates;
+        switch(type) {
+            case 'time':
+                dates = _.map(_.flatten(points), function(item) { return parseTime(item[key])});
+                break;
+            case 'date':
+                dates = _.map(_.flatten(points), function(item) { return parseDate(item[key])});
+                break;
+            default:
+                throw 'Invalid Type ' + type;
+        }
 
         // sort the dates
         var sortedDates = _.sortBy(dates, function(date) { return date});
@@ -114,6 +125,12 @@
         vm.scope.$watch(function() { return vm.window.innerHeight + vm.window.innerWidth; }, function() {
             debouncedRedraw();
         });
+
+        // on source data change, redraw
+        vm.scope.$watch(function() { return vm.type; }, function(newData) {
+            vm.log.info('type changed', newData);
+            debouncedRedraw();
+        }, true);
 
         // on source data change, redraw
         vm.scope.$watch(function() { return vm.sourceData; }, function(newData) {
@@ -146,7 +163,7 @@
     D3TimeGraphDirectiveCtrl.prototype.getSize = function() {
         var vm = this;
 
-        var width = vm.width || vm.$svgDiv.width();
+        var width = vm.width || parseInt(vm.svgDiv.style('width'));
         var height = vm.height || (width / WIDTH_TO_HEIGHT_RATIO);
 
 
@@ -164,15 +181,15 @@
             d3.min(vm.sourceData, function(c) { return d3.min(c.points, function(d) { return d.y; }); }),
             d3.max(vm.sourceData, function(c) { return d3.max(c.points, function(d) { return d.y; }); })
         ]);
-        var dateExtent = getNestedDateExtent(vm.sourceData, 'x');
+        var dateExtent = getNestedDateExtent(vm.type, vm.sourceData, 'x');
         if (dateExtent === undefined || dateExtent[0] === undefined) {
             throw 'Invalid dates passed in.';
         }
-        vm.x.domain(getNestedDateExtent(vm.sourceData, 'x'));
+        vm.x.domain(dateExtent);
 
         var valueLine = d3.line()
-            .x(function(d) { return vm.x(d.date); })
-            .y(function(d) { return vm.y(d.close); });
+            .x(function(d) { return vm.x(d.x); })
+            .y(function(d) { return vm.y(d.y); });
 
         _.forEach(vm.sourceData, function(data, index) {
             // check we haven't passed our max support number of data series
@@ -184,7 +201,14 @@
 
             // remap the data
             var cleanedData = _.map(data.points, function(d) {
-                return  {date: parseDate(d.x), close: +d.y};
+                switch(vm.type) {
+                    case 'time':
+                        return  {x: parseTime(d.x), y: +d.y};
+                    case 'date':
+                        return  {x: parseDate(d.x), y: +d.y};
+                    default:
+                        throw 'Invalid Type ' + vm.type;
+                }
             });
 
             // use the provided name to label the data series, otherwise use the index
@@ -226,6 +250,7 @@
             var legendRectSize = 14;
             var legendSpacing = 2;
             var maximumLegendOffset = 20;
+            var legendBeginningOffsetPercentage = 0.2;
 
             /**
              * Select the legend, select the domain of colors created earlier in the path fill function. Give each
@@ -242,7 +267,7 @@
                     var offset = legendHeight / vm.colors.domain().length;
                     // with few elements, we don't want the vertical spacing to be too large
                     offset = Math.min(maximumLegendOffset, offset);
-                    var horizontalPosition = vm.graphWidth + vm.legendWidth * 0.2 ;
+                    var horizontalPosition = vm.graphWidth + vm.legendWidth * legendBeginningOffsetPercentage ;
                     var verticalPosition = (index + 1) * offset;
                     return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
                 });
@@ -314,11 +339,6 @@
         // now update with Data
         vm.updateData();
     };
-
-    // TODO consider removeal D3TimeGraphDirectiveCtrl.prototype.addLegend = function() {
-    //     var vm = this;
-    //
-    // };
 
     var app = require('angular').module('swf.ng.app');
     app.controller('D3TimeGraphDirectiveCtrl', D3TimeGraphDirectiveCtrl);
