@@ -187,11 +187,19 @@
                 return  {date: parseDate(d.x), close: +d.y};
             });
 
+            // use the provided name to label the data series, otherwise use the index
+            var label;
+            if (data.name) {
+                label = data.name;
+            } else {
+                label = 'i: ' + index;
+            }
+
             // Add the valueline path.
             vm.svg.append('path')
                 .attr('class', 'line')
                 // .attr('stroke', LINE_COLORS[index]) TODO remove
-                .attr('stroke', vm.colors(index))
+                .attr('stroke', vm.colors(label))
                 .attr('stroke-width', 2)
                 .attr('fill', 'none')
                 .attr('d', valueLine(cleanedData));
@@ -213,48 +221,51 @@
             .attr('class', 'y axis')
             .call(vm.yAxis);
 
-        // draw the legend
-        // draw the legend
-        var legendRectSize = 20;
-        var legendSpacing = 4;
+        // draw the legend, if specified
+        if (vm.showLegend) {
+            var legendRectSize = 14;
+            var legendSpacing = 2;
+            var maximumLegendOffset = 20;
 
-        /**
-         * Select the legend, select the domain of colors created earlier in the path fill function. Give each
-         * 'g' element a legend class. Then center the legend based on the size of the chart. The color domain
-         * is an array of all names defined in the fill function.
-         */
-        var legend = vm.svg.selectAll('.legend')
-            .data(vm.colors.domain())
-            .enter()
-            .append('g')
-            .attr('class', 'legend')
-            .attr('transform', function (data, index) {
-                var legendHeight = vm.graphHeight;
-                var offset = legendHeight / vm.colors.domain().length;
-                var horizontalPosition = vm.graphWidth;
-                var verticalPosition = index * offset;
-                return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
-            });
+            /**
+             * Select the legend, select the domain of colors created earlier in the path fill function. Give each
+             * 'g' element a legend class. Then center the legend based on the size of the chart. The color domain
+             * is an array of all names defined in the fill function.
+             */
+            var legend = vm.svg.selectAll('.legend')
+                .data(vm.colors.domain())
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .attr('transform', function (data, index) {
+                    var legendHeight = vm.graphHeight;
+                    var offset = legendHeight / vm.colors.domain().length;
+                    // with few elements, we don't want the vertical spacing to be too large
+                    offset = Math.min(maximumLegendOffset, offset);
+                    var horizontalPosition = vm.graphWidth + vm.legendWidth * 0.2 ;
+                    var verticalPosition = (index + 1) * offset;
+                    return 'translate(' + horizontalPosition + ',' + verticalPosition + ')';
+                });
 
-        /**
-         * Add the legend squares to the chart
-         */
-        legend.append('rect')
-            .attr('width', legendRectSize)
-            .attr('height', legendRectSize)
-            .style('fill', vm.colors)
-            .style('stroke', vm.colors);
+            /**
+             * Add the legend squares to the chart
+             */
+            legend.append('rect')
+                .attr('width', legendRectSize)
+                .attr('height', legendRectSize)
+                .style('fill', vm.colors)
+                .style('stroke', vm.colors);
 
-        /**
-         * Add the legend test to the chart
-         */
-        legend.append('text')
-            .attr('x', legendRectSize + legendSpacing)
-            .attr('y', legendRectSize - legendSpacing)
-            .text(function (d) {
-                return d;
-            });
-
+            /**
+             * Add the legend test to the chart
+             */
+            legend.append('text')
+                .attr('x', legendRectSize + legendSpacing)
+                .attr('y', legendRectSize - legendSpacing)
+                .text(function (d) {
+                    return d;
+                });
+        }
     };
 
     /**

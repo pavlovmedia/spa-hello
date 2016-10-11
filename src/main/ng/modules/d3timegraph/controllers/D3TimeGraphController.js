@@ -63,7 +63,7 @@
 
             vm.sourceData.push({
                 points: tempData,
-                xLabel: 'Label ' + (index + 1)
+                name: 'Label ' + (index + 1)
             });
         });
     };
