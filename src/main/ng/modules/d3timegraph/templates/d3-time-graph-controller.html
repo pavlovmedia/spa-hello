@@ -1,0 +1,42 @@
+<div ng-init="vm.initialize()">
+    <br />
+    <div class="alert alert-info">Time Graph Directive Example[s]</div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <d3-time-graph-directive
+                        source-data="vm.sourceData"
+                        type="vm.type"
+                        height="vm.height"
+                        width="vm.width"
+                        show-legend="vm.showLegend"
+                >
+                </d3-time-graph-directive>
+            </div>
+            <div class="col-sm-4">
+                <h3>Inputs</h3>
+                <label>Set Size:<br>
+                    Width: <input type="number" ng-model="vm.width"><br>
+                    Height: <input type="number" ng-model="vm.height"><br>
+                </label><br>
+                <label>Select X-axis data type:<br>
+                    <input type="radio" ng-model="vm.type" value="date" ng-change="vm.addRandomData()"> Date<br>
+                    <input type="radio" ng-model="vm.type" value="time" ng-change="vm.addRandomData()"> Time<br>
+                </label><br>
+                <label><strong>Legend:</strong><br>
+                    Show: <input type="checkbox" ng-model="vm.showLegend"><br>
+                </label><br>
+                <label><strong># of Data Series</strong><br>
+                    <input type="number" ng-model="vm.numberOfSeries"> <input type="button" ng-click="vm.addRandomData()" value="Set"><br>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                Raw Data:
+                {{vm.sourceData}}
+            </div>
+        </div>
+    </div>
+</div>
