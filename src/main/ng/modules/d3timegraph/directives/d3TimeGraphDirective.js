@@ -9,11 +9,11 @@
             controller: 'D3TimeGraphDirectiveCtrl as vm',
             scope: {},
             bindToController: {
-                showLegend: '=',
-                type: '=',
                 sourceData: '=',
+                type: '=',
                 height: '=',
-                width: '='
+                width: '=',
+                showLegend: '='
             }
         };
     };

@@ -178,8 +178,8 @@
 
         // Scale the domain range of the data
         vm.y.domain([
-            d3.min(vm.sourceData, function(c) { return d3.min(c.points, function(d) { return d.y; }); }),
-            d3.max(vm.sourceData, function(c) { return d3.max(c.points, function(d) { return d.y; }); })
+            d3.min(vm.sourceData, function(dataSeries) { return d3.min(dataSeries.points, function(data) { return data.y; }); }),
+            d3.max(vm.sourceData, function(dataSeries) { return d3.max(dataSeries.points, function(data) { return data.y; }); })
         ]);
         var dateExtent = getNestedDateExtent(vm.type, vm.sourceData, 'x');
         if (dateExtent === undefined || dateExtent[0] === undefined) {
@@ -188,8 +188,8 @@
         vm.x.domain(dateExtent);
 
         var valueLine = d3.line()
-            .x(function(d) { return vm.x(d.x); })
-            .y(function(d) { return vm.y(d.y); });
+            .x(function(data) { return vm.x(data.x); })
+            .y(function(data) { return vm.y(data.y); });
 
         _.forEach(vm.sourceData, function(data, index) {
             // check we haven't passed our max support number of data series
@@ -200,12 +200,12 @@
             }
 
             // remap the data
-            var cleanedData = _.map(data.points, function(d) {
+            var cleanedData = _.map(data.points, function(data) {
                 switch(vm.type) {
                     case 'time':
-                        return  {x: parseTime(d.x), y: +d.y};
+                        return  {x: parseTime(data.x), y: +data.y};
                     case 'date':
-                        return  {x: parseDate(d.x), y: +d.y};
+                        return  {x: parseDate(data.x), y: +data.y};
                     default:
                         throw 'Invalid Type ' + vm.type;
                 }
@@ -222,7 +222,6 @@
             // Add the valueline path.
             vm.svg.append('path')
                 .attr('class', 'line')
-                // .attr('stroke', LINE_COLORS[index]) TODO remove
                 .attr('stroke', vm.colors(label))
                 .attr('stroke-width', 2)
                 .attr('fill', 'none')
@@ -313,7 +312,6 @@
         }
 
         // Adds/Replaces the SVG canvas
-        // var $svgDiv = $(vm.element);
         var oldSvg = vm.svgDiv.select('svg');
         if(oldSvg) {
             oldSvg.remove();

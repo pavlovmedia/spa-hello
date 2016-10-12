@@ -21,7 +21,6 @@
     D3TimeGraphCtrl.prototype.initialize = function () {
         var vm = this;
 
-        // FIXME test mock data
         vm.addRandomData();
     };
 
@@ -74,8 +73,8 @@
             }
 
             vm.sourceData.push({
-                points: tempData,
-                name: 'Label ' + (index + 1)
+                name: 'Label ' + (index + 1),
+                points: tempData
             });
         });
     };
