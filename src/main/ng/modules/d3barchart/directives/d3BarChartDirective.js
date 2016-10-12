@@ -28,6 +28,9 @@
                 var selector = d3.select(element[0]).select('div > div .testClass');
                 var debounceTime = 50;
 
+                /**
+                 * Sets a debounce so the graph doesn't get updated to many times in a row
+                 */
                 var debouncedRedraw = _.debounce(function() {
                     buildTable(scope.data);
                 }, debounceTime);
