@@ -25,7 +25,7 @@
                 var width = scope.width - margin.left - margin.right;
                 var height = scope.height - margin.top - margin.bottom;
                 var svg = undefined;
-                var selector = d3.select(element[0]).select('div > div .testClass');
+                var selector = d3.select(element[0]).select('div > div .graphRegion');
                 var debounceTime = 50;
 
                 /**
