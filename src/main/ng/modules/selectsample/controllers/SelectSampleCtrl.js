@@ -1,9 +1,10 @@
 (function() {
-	function TableSampleCtrl() {
+	function SelectSampleCtrl() {
 		var vm = this;
+		
+		vm.enumValue = 1;
 
-		vm.selectedItem = null;
-
+		// reeled in via vm-safe-src in the template, so can be a resolved promise too
 		vm.rowCollection = [
 			{
 				name: 'Dallas Colo',
@@ -133,15 +134,15 @@
 	function config($stateProvider, $urlRouterProvider) {
 		'ngInject';
 
-		$stateProvider.state('shell.tablesample', {
-			url: 'tablesample',
-			controller: 'TableSampleCtrl',
+		$stateProvider.state('shell.selectsample', {
+			url: 'selectsample',
+			controller: 'SelectSampleCtrl',
 			controllerAs: 'vm',
-			templateUrl: 'tablesample/templates/tablesample.html'
+			templateUrl: 'selectsample/templates/selectsample.html'
 		});
 	}
 
 	var app = require('angular').module('swf.ng.app');
-	app.controller('TableSampleCtrl', TableSampleCtrl);
+	app.controller('SelectSampleCtrl', SelectSampleCtrl);
 	app.config(config);
 })();
