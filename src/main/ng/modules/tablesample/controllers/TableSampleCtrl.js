@@ -4,6 +4,7 @@
 		
 		vm.itemsPerPage = 10;
 
+		// reeled in via vm-safe-src in the template, so can be a resolved promise too
 		vm.rowCollection = [
 			{
 				name: 'Dallas Colo',
