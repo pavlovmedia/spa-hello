@@ -16,7 +16,9 @@
     "swf-swagger-kit": "git+ssh://git@github.com/pavlovmedia/swf-swagger-kit.git"
   },
   "dependencies": {
+    "angular-smart-table": "^2.1.8",
     "d3": "^4.2.6",
-    "karma": "^0.13.22"
+    "karma": "^0.13.22",
+    "ui-select": "pavlovmedia/ui-select#0.19.1_spa-rolodex_fix"
   }
 }

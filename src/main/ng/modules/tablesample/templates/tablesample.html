@@ -1,0 +1,54 @@
+<div class="container">
+    <table st-table="displayedCollection" st-safe-src="vm.rowCollection"
+           class="table table-striped table-condensed table-bordered table--remove-tfoot-border">
+        <thead>
+        <tr>
+            <th colspan="11">
+                <div class="input-group max-width">
+                    <span class="input-group-addon"><i class="fa fa-fw fa-search"></i></span>
+                    <input st-search="" class="form-control"
+                           placeholder="Filter by name, facility, tenant, or ASN..."
+                           ng-model="searchText"/>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th width="5%"><input type="checkbox" ng-model="vm.checkAll"></th>
+            <th st-sort="name" width="9.5%">Name</th>
+            <th st-sort="facility" width="9.5%">Facility</th>
+            <th st-sort="tenant" width="9.5%">Tenant</th>
+            <th st-sort="asn" width="9.5%">ASN</th>
+            <th st-sort="racks" width="9.5%">Racks</th>
+            <th st-sort="devices" width="9.5%">Devices</th>
+            <th st-sort="prefixes" width="9.5%">Prefixes</th>
+            <th st-sort="vlans" width="9.5%">VLANs</th>
+            <th st-sort="circuits" width="9.5%">Circuits</th>
+            <th width="9.5%">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in displayedCollection">
+            <td><input type="checkbox"></td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.facility }}</td>
+            <td>{{ row.tenant }}</td>
+            <td>{{ row.asn }}</td>
+            <td>{{ row.racks }}</td>
+            <td>{{ row.devices }}</td>
+            <td>{{ row.prefixes }}</td>
+            <td>{{ row.vlans }}</td>
+            <td>{{ row.circuits }}</td>
+            <td>
+                <button class="btn btn-default">Details</button>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="11" class="text-center">
+                <div st-pagination="" st-items-by-page="vm.itemsPerPage"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

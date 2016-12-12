@@ -8,7 +8,10 @@ global.projectOverrides = {
     htmlLanguage: 'en',
     htmlCharset: 'UTF-8',
     projectVersion: '1.0.0-SNAPSHOT',
-    ngBrowserifyDeps: []
+    ngBrowserifyDeps: [
+        {fqn: 'angular-smart-table'},
+        {fqn: 'ui-select'}
+    ]
 };
 
 requireDir('node_modules/swf-ng-kit/src/gulp/tasks');
